@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TaskFlow.Domain.Entities;
+using TaskFlow.Domain.Enums;
 using TaskFlow.Domain.Interfaces;
 
 namespace TaskFlow.Infrastructure.Repositories
@@ -16,16 +17,16 @@ namespace TaskFlow.Infrastructure.Repositories
         }
 
         // *****
-        public async Task<IEnumerable<TaskItem>> GetAllAsync(int pageNumber, int pageSize, bool? isDone, string? sortBy)
+        public async Task<IEnumerable<TaskItem>> GetAllAsync(int pageNumber, int pageSize, bool? isDone, Sort? sortBy)
         {
             IQueryable<TaskItem> query = _context.TaskItems;
 
             if(isDone != null)
                 query = query.Where(t => t.IsDone == isDone);
 
-            if (sortBy == "title")
+            if (sortBy == Sort.Title)
                 query = query.OrderBy(t => t.Title);
-            else if (sortBy == "dueDate")
+            else if (sortBy == Sort.DueDate)
                 query = query.OrderBy(t => t.DueDate);
 
             query = query.Skip((pageNumber - 1) * pageSize)

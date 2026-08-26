@@ -18,7 +18,8 @@ namespace TaskFlow.Infrastructure.Configurations
             builder.Property(t => t.IsDone).HasDefaultValue(false);
             builder.HasOne(t => t.AssignedUser)
                 .WithMany(u => u.TaskItems)
-                .HasForeignKey(t => t.AssignedUserId);
+                .HasForeignKey(t => t.AssignedUserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

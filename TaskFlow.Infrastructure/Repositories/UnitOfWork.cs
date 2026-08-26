@@ -8,13 +8,10 @@ namespace TaskFlow.Infrastructure.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _context;
-        public IUserRepository Users { get; }
-        public ITaskItemRepository TaskItems { get; }
-        public UnitOfWork(ApplicationDbContext context, IUserRepository userRepository, ITaskItemRepository taskItemRepository)
+   
+        public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
-            Users = userRepository;
-            TaskItems = taskItemRepository;
         }
 
         public async Task<int> SaveChangesAsync()

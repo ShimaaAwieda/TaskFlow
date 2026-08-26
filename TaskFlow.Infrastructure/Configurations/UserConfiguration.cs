@@ -15,9 +15,7 @@ namespace TaskFlow.Infrastructure.Configurations
             builder.Property(u => u.Name).IsRequired();
             builder.Property(u => u.Email).IsRequired();
             builder.HasIndex(u => u.Email).IsUnique();
-            builder.HasMany(u => u.TaskItems)
-                .WithOne(t => t.AssignedUser)
-                .HasForeignKey(t => t.AssignedUserId);
+            
         }
     }
 }
