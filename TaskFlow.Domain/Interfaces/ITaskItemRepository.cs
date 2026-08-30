@@ -9,14 +9,15 @@ namespace TaskFlow.Domain.Interfaces
     public interface ITaskItemRepository
     {
         Task<IEnumerable<TaskItem>> GetAllAsync(
+            Guid? userId,
             int pageNumber = 1,
             int pageSize = 10,
             bool? isDone = null,
             Sort? sortBy = null
             );
-        Task<TaskItem?> FindByIdAsync(Guid id);
+        Task<TaskItem?> GetByIdAsync(Guid id);
         Task AddAsync(TaskItem item);
         void Update(TaskItem item);
-        void Delete(int id);
+        void Delete(Guid id);
     }
 }

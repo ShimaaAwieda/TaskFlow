@@ -16,10 +16,12 @@ namespace TaskFlow.Infrastructure.Repositories
             _context = context;
         }
 
-        // *****
-        public async Task<IEnumerable<TaskItem>> GetAllAsync(int pageNumber, int pageSize, bool? isDone, Sort? sortBy)
+        public async Task<IEnumerable<TaskItem>> GetAllAsync(Guid? userId,int pageNumber, int pageSize, bool? isDone, Sort? sortBy)
         {
             IQueryable<TaskItem> query = _context.TaskItems;
+
+            if(userId != null)
+                query = query.Where(t => t.AssignedUserId == userId);
 
             if(isDone != null)
                 query = query.Where(t => t.IsDone == isDone);
@@ -35,7 +37,7 @@ namespace TaskFlow.Infrastructure.Repositories
             return await query.ToListAsync();
         }
         
-        public async Task<TaskItem?> FindByIdAsync(Guid id)
+        public async Task<TaskItem?> GetByIdAsync(Guid id)
         {
             return await _context.TaskItems.FindAsync(id);
         }
@@ -49,7 +51,7 @@ namespace TaskFlow.Infrastructure.Repositories
             _context.TaskItems.Update(item);
         }
 
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
             var item = _context.TaskItems.Find(id);
             _context.TaskItems.Remove(item);
