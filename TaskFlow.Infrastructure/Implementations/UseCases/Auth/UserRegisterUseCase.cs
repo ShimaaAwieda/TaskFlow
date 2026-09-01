@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using TaskFlow.Application.DTOs;
 using TaskFlow.Application.Interfaces.UseCases.Auth;
+using TaskFlow.Application.Exceptions;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Domain.Enums;
-using TaskFlow.Domain.Exceptions;
 using TaskFlow.Domain.Interfaces;
 
 namespace TaskFlow.Infrastructure.Implementations.UseCases.Auth
@@ -20,7 +20,7 @@ namespace TaskFlow.Infrastructure.Implementations.UseCases.Auth
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
         }
-        public async Task RegisterAsync(RegisterDto dto)
+        public async Task ExecuteAsync(RegisterDto dto)
         {
             var existingUser = await _userRepository.FindByEmailAsync(dto.Email);
 

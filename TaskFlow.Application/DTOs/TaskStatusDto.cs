@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TaskFlow.Domain.Enums;
 
 namespace TaskFlow.Application.DTOs
 {
     public class TaskStatusDto
     {
-        public bool isDone { get; set; }
+        public Status isDone { get; set; }
     }
 }

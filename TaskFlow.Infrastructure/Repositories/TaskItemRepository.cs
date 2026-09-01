@@ -16,7 +16,7 @@ namespace TaskFlow.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<TaskItem>> GetAllAsync(Guid? userId,int pageNumber, int pageSize, bool? isDone, Sort? sortBy)
+        public async Task<IEnumerable<TaskItem>> GetAllAsync(Guid? userId,int pageNumber, int pageSize, Status? isDone, Sort? sortBy, SortOrder? sortOrder)
         {
             IQueryable<TaskItem> query = _context.TaskItems;
 
@@ -26,10 +26,14 @@ namespace TaskFlow.Infrastructure.Repositories
             if(isDone != null)
                 query = query.Where(t => t.IsDone == isDone);
 
-            if (sortBy == Sort.Title)
-                query = query.OrderBy(t => t.Title);
-            else if (sortBy == Sort.DueDate)
-                query = query.OrderBy(t => t.DueDate);
+            query = (sortBy, sortOrder) switch
+            {
+                (Sort.Title, SortOrder.Ascending) => query.OrderBy(t => t.Title),
+                (Sort.Title, SortOrder.Descending) => query.OrderByDescending(t => t.Title),
+                (Sort.DueDate, SortOrder.Ascending) => query.OrderBy(t => t.DueDate),
+                (Sort.DueDate, SortOrder.Descending) => query.OrderByDescending(t => t.DueDate),
+                _ => query
+            };
 
             query = query.Skip((pageNumber - 1) * pageSize)
                          .Take(pageSize);
