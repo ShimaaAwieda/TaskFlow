@@ -7,6 +7,6 @@ namespace TaskFlow.Application.DTOs
 {
     public class TaskStatusDto
     {
-        public Status isDone { get; set; }
+        public Status status { get; set; }
     }
 }

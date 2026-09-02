@@ -1,4 +1,6 @@
-﻿using TaskFlow.Application.DTOs;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using TaskFlow.Application.Exceptions;
 using TaskFlow.Application.Interfaces.Services;
 using TaskFlow.Application.Interfaces.UseCases.Tasks;
@@ -6,17 +8,20 @@ using TaskFlow.Domain.Interfaces;
 
 namespace TaskFlow.Infrastructure.Implementations.UseCases.Tasks
 {
-    public class GetTaskByIdUseCase : IGetTaskByIdUseCase
+    public class DeleteTaskUseCase : IDeleteTaskUseCase
     {
         private readonly ITaskItemRepository _taskItemRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ICurrentUserService _currentUserService;
 
-        public GetTaskByIdUseCase(ITaskItemRepository taskItemRepository, ICurrentUserService currentUserService)
+        public DeleteTaskUseCase(ITaskItemRepository taskItemRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
         {
             _taskItemRepository = taskItemRepository;
+            _unitOfWork = unitOfWork;
             _currentUserService = currentUserService;
         }
-        public async Task<TaskDto> ExecuteAsync(Guid id)
+
+        public async Task ExecuteAsync(Guid id)
         {
             var task = await _taskItemRepository.GetByIdAsync(id);
 
@@ -24,17 +29,10 @@ namespace TaskFlow.Infrastructure.Implementations.UseCases.Tasks
                 throw new NotFoundException("Task not found");
 
             if (!_currentUserService.IsInRole("Admin") && _currentUserService.UserId != task.AssignedUserId)
-                throw new UnauthorizedException("You are not allowed to update this task");
+                throw new UnauthorizedException("You are not allowed to delete this task");
 
-            return new TaskDto
-            {
-                Id = task.Id,
-                Title = task.Title,
-                Description = task.Description,
-                status = task.status,
-                DueDate = task.DueDate,
-                AssignedUserId = task.AssignedUserId
-            };
+            _taskItemRepository.Delete(id);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

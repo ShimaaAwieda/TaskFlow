@@ -12,7 +12,7 @@ namespace TaskFlow.Domain.Interfaces
             Guid? userId,
             int pageNumber,
             int pageSize,
-            Status? isDone,
+            Status? status,
             Sort? sortBy,
             SortOrder? sortOrder
             );

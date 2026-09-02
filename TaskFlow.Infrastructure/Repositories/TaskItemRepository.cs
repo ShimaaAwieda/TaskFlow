@@ -16,15 +16,15 @@ namespace TaskFlow.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<TaskItem>> GetAllAsync(Guid? userId,int pageNumber, int pageSize, Status? isDone, Sort? sortBy, SortOrder? sortOrder)
+        public async Task<IEnumerable<TaskItem>> GetAllAsync(Guid? userId,int pageNumber, int pageSize, Status? status, Sort? sortBy, SortOrder? sortOrder)
         {
             IQueryable<TaskItem> query = _context.TaskItems;
 
             if(userId != null)
                 query = query.Where(t => t.AssignedUserId == userId);
 
-            if(isDone != null)
-                query = query.Where(t => t.IsDone == isDone);
+            if(status != null)
+                query = query.Where(t => t.status == status);
 
             query = (sortBy, sortOrder) switch
             {

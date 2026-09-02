@@ -9,7 +9,7 @@ namespace TaskFlow.Application.DTOs
     {
         public string Title { get; set; }
         public string? Description { get; set; }
-        public Status isDone { get; set; }
+        public Status status { get; set; }
         public DateTime? DueDate { get; set; }
         public Guid? AssignedUserId { get; set; }
     }

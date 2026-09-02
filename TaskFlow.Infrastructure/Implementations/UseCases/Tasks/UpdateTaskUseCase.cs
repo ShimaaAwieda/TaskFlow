@@ -6,17 +6,20 @@ using TaskFlow.Domain.Interfaces;
 
 namespace TaskFlow.Infrastructure.Implementations.UseCases.Tasks
 {
-    public class GetTaskByIdUseCase : IGetTaskByIdUseCase
+    public class UpdateTaskUseCase : IUpdateTaskUseCase
     {
         private readonly ITaskItemRepository _taskItemRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ICurrentUserService _currentUserService;
 
-        public GetTaskByIdUseCase(ITaskItemRepository taskItemRepository, ICurrentUserService currentUserService)
+        public UpdateTaskUseCase(ITaskItemRepository taskItemRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
         {
             _taskItemRepository = taskItemRepository;
+            _unitOfWork = unitOfWork;
             _currentUserService = currentUserService;
         }
-        public async Task<TaskDto> ExecuteAsync(Guid id)
+
+        public async Task<TaskDto> ExecuteAsync(Guid id, UpdateTaskDto dto)
         {
             var task = await _taskItemRepository.GetByIdAsync(id);
 
@@ -25,6 +28,20 @@ namespace TaskFlow.Infrastructure.Implementations.UseCases.Tasks
 
             if (!_currentUserService.IsInRole("Admin") && _currentUserService.UserId != task.AssignedUserId)
                 throw new UnauthorizedException("You are not allowed to update this task");
+
+            task.Title = dto.Title;
+            task.Description = dto.Description;
+            task.status = dto.status;
+            task.DueDate = dto.DueDate;
+
+            if (_currentUserService.IsInRole("Admin"))
+            {
+                task.AssignedUserId = dto.AssignedUserId
+                    ?? throw new BadRequestException("Assigned user is required");
+            }
+
+            _taskItemRepository.Update(task);
+            await _unitOfWork.SaveChangesAsync();
 
             return new TaskDto
             {

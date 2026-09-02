@@ -10,7 +10,7 @@ namespace TaskFlow.Domain.Entities
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string? Description { get; set; }
-        public Status IsDone { get; set; } = Status.New;
+        public Status status { get; set; } = Status.New;
         public DateTime? DueDate { get; set; }
         public Guid AssignedUserId { get; set; }
         public User AssignedUser { get; set; }

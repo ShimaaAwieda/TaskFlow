@@ -26,7 +26,7 @@ namespace TaskFlow.Infrastructure.Implementations.UseCases.Auth
             if (user == null)
                 throw new UnauthorizedException("Invalid Email or Password");
 
-            if(user.Password != dto.Password)
+            if(!BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
                 throw new UnauthorizedException("Invalid Email or Password");
 
             var token = _jwtService.GenerateToken(

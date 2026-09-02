@@ -9,7 +9,7 @@ namespace TaskFlow.Application.DTOs
     {
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
-        public Status? IsDone { get; set; }
+        public Status? status { get; set; }
         public Sort? SortBy { get; set; }
         public SortOrder? Order { get; set; }
     }

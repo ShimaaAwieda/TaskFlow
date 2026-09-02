@@ -27,12 +27,14 @@ namespace TaskFlow.Infrastructure.Implementations.UseCases.Auth
             if (existingUser != null)
                 throw new ConflictException("Email already exists");
 
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+
             var user = new User
             {
                 Id = Guid.NewGuid(),
                 Name = dto.Name,
                 Email = dto.Email,
-                Password = dto.Password,
+                Password = hashedPassword,
                 Role = Role.Member
             };
             await _userRepository.AddAsync(user);
