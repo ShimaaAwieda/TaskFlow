@@ -4,10 +4,12 @@ using System.Security.Claims;
 using System.Text;
 using TaskFlow.Application.Interfaces.Services;
 using TaskFlow.Application.Interfaces.UseCases.Auth;
+using TaskFlow.Application.Interfaces.UseCases.Tasks;
 using TaskFlow.Application.Settings;
 using TaskFlow.Domain.Interfaces;
 using TaskFlow.Infrastructure.Implementations.Services;
 using TaskFlow.Infrastructure.Implementations.UseCases.Auth;
+using TaskFlow.Infrastructure.Implementations.UseCases.Tasks;
 using TaskFlow.Infrastructure.Repositories;
 
 namespace TaskFlow.API.Extensions
@@ -18,11 +20,18 @@ namespace TaskFlow.API.Extensions
         {
             services.AddScoped<IUserRegisterUseCase, UserRegisterUseCase>();
             services.AddScoped<IUserLoginUseCase, UserLoginUseCase>();
+            services.AddScoped<ICreateTaskUseCase, CreateTaskUseCase>();
+            services.AddScoped<IGetAllTasksUseCase, GetAllTasksUseCase>();
+            services.AddScoped<IGetTaskByIdUseCase, GetTaskByIdUseCase>();
+            services.AddScoped<IUpdateTaskUseCase, UpdateTaskUseCase>();
+            services.AddScoped<IUpdateTaskStatusUseCase, UpdateTaskStatusUseCase>();
+            services.AddScoped<IDeleteTaskUseCase, DeleteTaskUseCase>();
         }
         
         public static void RegisterServices(this IServiceCollection services)
         {
             services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
         }
 
         public static void RegisterRepositories(this IServiceCollection services)

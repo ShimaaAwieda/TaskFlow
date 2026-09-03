@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TaskFlow.Domain.Entities;
+using TaskFlow.Domain.Enums;
 
 namespace TaskFlow.Infrastructure.Configurations
 {
@@ -15,7 +16,7 @@ namespace TaskFlow.Infrastructure.Configurations
             builder.HasKey(t => t.Id);
             builder.Property(t => t.Title).IsRequired().HasMaxLength(100);
             builder.Property(t => t.Description).HasMaxLength(250);
-            builder.Property(t => t.IsDone).HasDefaultValue(false);
+            builder.Property(t => t.status).HasDefaultValue(Status.New);
             builder.HasOne(t => t.AssignedUser)
                 .WithMany(u => u.TaskItems)
                 .HasForeignKey(t => t.AssignedUserId)
