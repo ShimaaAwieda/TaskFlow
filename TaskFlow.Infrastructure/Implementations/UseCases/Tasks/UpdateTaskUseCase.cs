@@ -9,12 +9,14 @@ namespace TaskFlow.Infrastructure.Implementations.UseCases.Tasks
     public class UpdateTaskUseCase : IUpdateTaskUseCase
     {
         private readonly ITaskItemRepository _taskItemRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICurrentUserService _currentUserService;
 
-        public UpdateTaskUseCase(ITaskItemRepository taskItemRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
+        public UpdateTaskUseCase(ITaskItemRepository taskItemRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
         {
             _taskItemRepository = taskItemRepository;
+            _userRepository = userRepository;
             _unitOfWork = unitOfWork;
             _currentUserService = currentUserService;
         }
@@ -27,7 +29,7 @@ namespace TaskFlow.Infrastructure.Implementations.UseCases.Tasks
                 throw new NotFoundException("Task not found");
 
             if (!_currentUserService.IsInRole("Admin") && _currentUserService.UserId != task.AssignedUserId)
-                throw new UnauthorizedException("You are not allowed to update this task");
+                throw new ForbiddenException("You are not allowed to update this task");
 
             task.Title = dto.Title;
             task.Description = dto.Description;
@@ -36,8 +38,15 @@ namespace TaskFlow.Infrastructure.Implementations.UseCases.Tasks
 
             if (_currentUserService.IsInRole("Admin"))
             {
-                task.AssignedUserId = dto.AssignedUserId
+                var assignedUserId = dto.AssignedUserId
                     ?? throw new BadRequestException("Assigned user is required");
+
+                var assignedUser = await _userRepository.FindByIdAsync(assignedUserId);
+
+                if (assignedUser == null)
+                    throw new NotFoundException("Assigned user not found");
+
+                task.AssignedUserId = assignedUserId;
             }
 
             _taskItemRepository.Update(task);

@@ -29,7 +29,7 @@ namespace TaskFlow.Infrastructure.Implementations.UseCases.Tasks
                 throw new NotFoundException("Task not found");
 
             if (!_currentUserService.IsInRole("Admin") && _currentUserService.UserId != task.AssignedUserId)
-                throw new UnauthorizedException("You are not allowed to delete this task");
+                throw new ForbiddenException("You are not allowed to delete this task");
 
             _taskItemRepository.Delete(id);
             await _unitOfWork.SaveChangesAsync();

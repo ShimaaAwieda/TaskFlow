@@ -30,7 +30,7 @@ namespace TaskFlow.Infrastructure.Implementations.UseCases.Tasks
                 throw new NotFoundException("Task not found");
 
             if (!_currentUserService.IsInRole("Admin") && _currentUserService.UserId != task.AssignedUserId)
-                throw new UnauthorizedException("You are not allowed to update this task");
+                throw new ForbiddenException("You are not allowed to update this task");
 
             task.status = dto.status;
 
