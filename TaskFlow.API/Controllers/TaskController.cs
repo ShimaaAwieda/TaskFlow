@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.DTOs;
 using TaskFlow.Application.Interfaces.UseCases.Tasks;
@@ -7,6 +8,7 @@ namespace TaskFlow.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TaskController : ControllerBase
     {
         private readonly ICreateTaskUseCase _createTaskUseCase;

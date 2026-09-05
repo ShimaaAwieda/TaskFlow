@@ -42,6 +42,9 @@ namespace TaskFlow.Infrastructure.Implementations.UseCases.Tasks
             }
             else
             {
+                if (dto.AssignedUserId != null && dto.AssignedUserId != _currentUserService.UserId)
+                    throw new ForbiddenException("You are not allowed to assign a task to another user");
+
                 assignedUserId = _currentUserService.UserId;
             }
 

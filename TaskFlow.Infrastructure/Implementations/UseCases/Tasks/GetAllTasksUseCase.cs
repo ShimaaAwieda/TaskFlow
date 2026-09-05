@@ -40,7 +40,7 @@ namespace TaskFlow.Infrastructure.Implementations.UseCases.Tasks
                 Id = t.Id,
                 Title = t.Title,
                 Description = t.Description,
-                status = t.status,
+                status = t.status.ToString(),
                 DueDate = t.DueDate,
                 AssignedUserId = t.AssignedUserId
             });
