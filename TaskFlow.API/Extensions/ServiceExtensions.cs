@@ -24,7 +24,6 @@ namespace TaskFlow.API.Extensions
             services.AddScoped<IGetAllTasksUseCase, GetAllTasksUseCase>();
             services.AddScoped<IGetTaskByIdUseCase, GetTaskByIdUseCase>();
             services.AddScoped<IUpdateTaskUseCase, UpdateTaskUseCase>();
-            services.AddScoped<IUpdateTaskStatusUseCase, UpdateTaskStatusUseCase>();
             services.AddScoped<IDeleteTaskUseCase, DeleteTaskUseCase>();
         }
         

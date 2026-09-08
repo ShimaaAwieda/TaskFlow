@@ -24,7 +24,7 @@ namespace TaskFlow.Infrastructure.Repositories
                 query = query.Where(t => t.AssignedUserId == userId);
 
             if(status != null)
-                query = query.Where(t => t.status == status);
+                query = query.Where(t => t.Status == status);
 
             query = (sortBy, sortOrder) switch
             {
@@ -55,9 +55,8 @@ namespace TaskFlow.Infrastructure.Repositories
             _context.TaskItems.Update(item);
         }
 
-        public void Delete(Guid id)
+        public void Delete(TaskItem item)
         {
-            var item = _context.TaskItems.Find(id);
             _context.TaskItems.Remove(item);
         }
     }

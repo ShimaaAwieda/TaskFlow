@@ -31,23 +31,20 @@ namespace TaskFlow.Infrastructure.Implementations.UseCases.Tasks
             if (!_currentUserService.IsInRole("Admin") && _currentUserService.UserId != task.AssignedUserId)
                 throw new ForbiddenException("You are not allowed to update this task");
 
-            task.Title = dto.Title;
-            task.Description = dto.Description;
-            task.status = dto.status;
-            task.DueDate = dto.DueDate;
-
-            if (_currentUserService.IsInRole("Admin"))
+            if (_currentUserService.IsInRole("Admin") && dto.AssignedUserId.HasValue)
             {
-                var assignedUserId = dto.AssignedUserId
-                    ?? throw new BadRequestException("Assigned user is required");
-
-                var assignedUser = await _userRepository.FindByIdAsync(assignedUserId);
+                var assignedUser = await _userRepository.FindByIdAsync(dto.AssignedUserId.Value);
 
                 if (assignedUser == null)
                     throw new NotFoundException("Assigned user not found");
 
-                task.AssignedUserId = assignedUserId;
+                task.AssignedUserId = dto.AssignedUserId.Value;
             }
+
+            task.Title = dto.Title ?? task.Title;
+            task.Description = dto.Description ?? task.Description;
+            task.Status = dto.Status ?? task.Status;
+            task.DueDate = dto.DueDate ?? task.DueDate;
 
             _taskItemRepository.Update(task);
             await _unitOfWork.SaveChangesAsync();
@@ -57,7 +54,7 @@ namespace TaskFlow.Infrastructure.Implementations.UseCases.Tasks
                 Id = task.Id,
                 Title = task.Title,
                 Description = task.Description,
-                status = task.status.ToString(),
+                Status = task.Status.ToString(),
                 DueDate = task.DueDate,
                 AssignedUserId = task.AssignedUserId
             };

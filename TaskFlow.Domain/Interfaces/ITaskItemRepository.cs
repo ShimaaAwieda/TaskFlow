@@ -19,6 +19,6 @@ namespace TaskFlow.Domain.Interfaces
         Task<TaskItem?> GetByIdAsync(Guid id);
         Task AddAsync(TaskItem item);
         void Update(TaskItem item);
-        void Delete(Guid id);
+        void Delete(TaskItem item);
     }
 }

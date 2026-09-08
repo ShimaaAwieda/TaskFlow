@@ -30,7 +30,7 @@ namespace TaskFlow.Infrastructure.Implementations.UseCases.Tasks
                 userId,
                 dto.PageNumber,
                 dto.PageSize,
-                dto.status,
+                dto.Status,
                 dto.SortBy,
                 dto.Order
                 );
@@ -40,7 +40,7 @@ namespace TaskFlow.Infrastructure.Implementations.UseCases.Tasks
                 Id = t.Id,
                 Title = t.Title,
                 Description = t.Description,
-                status = t.status.ToString(),
+                Status = t.Status.ToString(),
                 DueDate = t.DueDate,
                 AssignedUserId = t.AssignedUserId
             });

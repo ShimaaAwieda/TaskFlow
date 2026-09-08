@@ -31,7 +31,7 @@ namespace TaskFlow.Infrastructure.Implementations.UseCases.Tasks
             if (!_currentUserService.IsInRole("Admin") && _currentUserService.UserId != task.AssignedUserId)
                 throw new ForbiddenException("You are not allowed to delete this task");
 
-            _taskItemRepository.Delete(id);
+            _taskItemRepository.Delete(task);
             await _unitOfWork.SaveChangesAsync();
         }
     }
