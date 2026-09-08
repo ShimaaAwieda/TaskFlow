@@ -9,5 +9,6 @@ namespace TaskFlow.Domain.Interfaces
     {
         Task AddAsync(User user);
         Task<User?> FindByEmailAsync(string email);
+        Task<User?> FindByIdAsync(Guid id);
     }
 }

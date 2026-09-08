@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TaskFlow.Domain.Exceptions
+namespace TaskFlow.Application.Exceptions
 {
     public class UnauthorizedException : Exception
     {

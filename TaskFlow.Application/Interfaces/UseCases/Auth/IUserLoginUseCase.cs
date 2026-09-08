@@ -7,6 +7,6 @@ namespace TaskFlow.Application.Interfaces.UseCases.Auth
 {
     public interface IUserLoginUseCase
     {
-        Task<string> LoginAsync(LoginDto dto);
+        Task<string> ExecuteAsync(LoginDto dto);
     }
 }
