@@ -10,14 +10,15 @@ namespace TaskFlow.Domain.Interfaces
     {
         Task<IEnumerable<TaskItem>> GetAllAsync(
             Guid? userId,
-            int pageNumber = 1,
-            int pageSize = 10,
-            bool? isDone = null,
-            Sort? sortBy = null
+            int pageNumber,
+            int pageSize,
+            Status? status,
+            Sort? sortBy,
+            SortOrder? sortOrder
             );
         Task<TaskItem?> GetByIdAsync(Guid id);
         Task AddAsync(TaskItem item);
         void Update(TaskItem item);
-        void Delete(Guid id);
+        void Delete(TaskItem item);
     }
 }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using TaskFlow.Application.DTOs;
 using TaskFlow.Application.Interfaces.UseCases.Auth;
+using TaskFlow.Application.Exceptions;
 using TaskFlow.Domain.Entities;
 using TaskFlow.Domain.Enums;
-using TaskFlow.Domain.Exceptions;
 using TaskFlow.Domain.Interfaces;
 
 namespace TaskFlow.Infrastructure.Implementations.UseCases.Auth
@@ -20,19 +20,21 @@ namespace TaskFlow.Infrastructure.Implementations.UseCases.Auth
             _userRepository = userRepository;
             _unitOfWork = unitOfWork;
         }
-        public async Task RegisterAsync(RegisterDto dto)
+        public async Task ExecuteAsync(RegisterDto dto)
         {
             var existingUser = await _userRepository.FindByEmailAsync(dto.Email);
 
             if (existingUser != null)
                 throw new ConflictException("Email already exists");
 
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
+
             var user = new User
             {
                 Id = Guid.NewGuid(),
                 Name = dto.Name,
                 Email = dto.Email,
-                Password = dto.Password,
+                Password = hashedPassword,
                 Role = Role.Member
             };
             await _userRepository.AddAsync(user);

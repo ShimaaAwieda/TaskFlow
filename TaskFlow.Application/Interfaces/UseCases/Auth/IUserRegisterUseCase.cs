@@ -7,6 +7,6 @@ namespace TaskFlow.Application.Interfaces.UseCases.Auth
 {
     public interface IUserRegisterUseCase
     {
-        Task RegisterAsync(RegisterDto dto);
+        Task ExecuteAsync(RegisterDto dto);
     }
 }

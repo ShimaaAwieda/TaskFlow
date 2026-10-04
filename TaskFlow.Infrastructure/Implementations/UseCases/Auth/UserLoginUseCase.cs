@@ -4,7 +4,7 @@ using System.Text;
 using TaskFlow.Application.DTOs;
 using TaskFlow.Application.Interfaces.Services;
 using TaskFlow.Application.Interfaces.UseCases.Auth;
-using TaskFlow.Domain.Exceptions;
+using TaskFlow.Application.Exceptions;
 using TaskFlow.Domain.Interfaces;
 
 namespace TaskFlow.Infrastructure.Implementations.UseCases.Auth
@@ -19,14 +19,14 @@ namespace TaskFlow.Infrastructure.Implementations.UseCases.Auth
             _userRepository = userRepository;
             _jwtService = jwtService;
         }
-        public async Task<string> LoginAsync(LoginDto dto)
+        public async Task<string> ExecuteAsync(LoginDto dto)
         {
             var user = await _userRepository.FindByEmailAsync(dto.Email);
 
             if (user == null)
                 throw new UnauthorizedException("Invalid Email or Password");
 
-            if(user.Password != dto.Password)
+            if(!BCrypt.Net.BCrypt.Verify(dto.Password, user.Password))
                 throw new UnauthorizedException("Invalid Email or Password");
 
             var token = _jwtService.GenerateToken(

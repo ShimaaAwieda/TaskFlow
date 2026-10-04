@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 using TaskFlow.Domain.Enums;
 
-namespace TaskFlow.Application.DTOs
+namespace TaskFlow.API.ViewModels
 {
-    public class UpdateTaskDto
+    public class UpdateTaskVM
     {
+        [StringLength(100, ErrorMessage = "Title can't exceed 100 characters")]
         public string? Title { get; set; }
+
+        [StringLength(500, ErrorMessage = "Description can't exceed 500 characters")]
         public string? Description { get; set; }
         public Status? Status { get; set; }
         public DateTime? DueDate { get; set; }

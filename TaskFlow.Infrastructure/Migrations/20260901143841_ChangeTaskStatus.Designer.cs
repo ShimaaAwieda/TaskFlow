@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskFlow.Infrastructure;
 
@@ -11,9 +12,11 @@ using TaskFlow.Infrastructure;
 namespace TaskFlow.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260901143841_ChangeTaskStatus")]
+    partial class ChangeTaskStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,15 +41,15 @@ namespace TaskFlow.Infrastructure.Migrations
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("IsDone")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
 
                     b.HasKey("Id");
 
@@ -82,16 +85,6 @@ namespace TaskFlow.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("7f3b2c91-4d68-4a15-9e27-81c6f5b90342"),
-                            Email = "admin@gmail.com",
-                            Name = "Admin",
-                            Password = "$2a$11$tcNLAG/B/Hu/4jqUmCrw3eBV6OsxWtSD8JLUhS6duobkNIGkgieWW",
-                            Role = 0
-                        });
                 });
 
             modelBuilder.Entity("TaskFlow.Domain.Entities.TaskItem", b =>
